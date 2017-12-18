@@ -23,7 +23,33 @@ int n;
 int in[MAX_N],tmp[MAX_N];
 void merge(int left,int mid,int right){
 	int h,i,j,k;
-	
+	h=left;
+	i=left;
+	j=mid+1;
+	while(h<=mid && j<=right){
+		if(in[h]<=in[j]){
+			tmp[i]=in[h];
+			h++;
+		}
+		else {
+			tmp[i]=in[j];
+			j++;
+		}
+		i++;
+	}
+	if(h>mid){
+		for(k=j;k<=right;k++){
+			tmp[i]=in[k];
+			i++;
+		}
+	}
+	else {
+		for(k=h;k<=mid;k++){
+			tmp[i]=in[k];
+			i++;
+		}
+	}
+	for(k=left;k<=right;k++) in[k] = tmp[k];
 
 }
 void mergeSort(int left,int right){
