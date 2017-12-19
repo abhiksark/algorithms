@@ -18,55 +18,61 @@ Merge Sort
 #define MAX_N 1000001
 using namespace std;
 typedef long long lld;
+int *temp;
+void conquerMerge(int array[], int left, int right, int mid){
+    int k = left, i, j;
 
-int n;
-int in[MAX_N],tmp[MAX_N];
-void merge(int left,int mid,int right){
-	int h,i,j,k;
-	h=left;
-	i=left;
-	j=mid+1;
-	while(h<=mid && j<=right){
-		if(in[h]<=in[j]){
-			tmp[i]=in[h];
-			h++;
-		}
-		else {
-			tmp[i]=in[j];
-			j++;
-		}
-		i++;
-	}
-	if(h>mid){
-		for(k=j;k<=right;k++){
-			tmp[i]=in[k];
-			i++;
-		}
-	}
-	else {
-		for(k=h;k<=mid;k++){
-			tmp[i]=in[k];
-			i++;
-		}
-	}
-	for(k=left;k<=right;k++) in[k] = tmp[k];
+    for(i = left, j = mid + 1; i <= mid && j <= right; k++){
+        if(array[i] <= array[j]){
+            temp[k] = array[i];
+            i++;
+        }
+        else{
+            temp[k] = array[j];
+            j++;
+        }
+    }
 
+    while(i <= mid){
+        temp[k] = array[i];
+        i++;
+        k++;
+    }
+
+    while(j <= right){
+        temp[k] = array[j];
+        j++;
+        k++;
+    }
+
+    for(i = left; i <= right; i++)
+        array[i] = temp[i];
 }
-void mergeSort(int left,int right){
-	if(left == right)
-		return;
-	int mid =(left + right )/2;
-	mergeSort(left,mid);
-	mergeSort(mid+1,right);
-	merge(left,mid,right);
+void divide(int array[], int left, int right){
+    if(left < right){
+        int mid = left + (right - left) / 2;
 
+        divide(array, left, mid);
+        divide(array, mid + 1, right);
+
+        conquerMerge(array, left, right, mid);
+    }
+}
+void MergeSort(int array[], int size){
+    temp = new int[size];
+    divide(array, 0, size - 1);
+    delete [] temp;
+}
+void PrintArray(int array[], int size){
+    for(int i = 0; i < size; i++)
+        cout << array[i] << " ";
+
+    cout << endl;
 }
 
 int main(){
-	int n=8;
-	in[0]=4;in[1]=2;in[2]=1;in[3]=0;in[4]=5;in[5]=6;in[6]=9;in[7]=8;
-	mergeSort(0,n-1);
-	for(int i=0;i<n;i++)
-		cout<<in[i]<<endl;
+	int array[] = {2, 4, 3, 1, 6, 8, 4};
+	MergeSort(array,7);
+	PrintArray(array, 7);
 	return 0;
 }
